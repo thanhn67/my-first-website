@@ -4,37 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh Nguyen</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <!-- Prevent flash of wrong theme -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.style.background = '#1a1a2e';
+            document.documentElement.style.color = '#d8d8d8';
+        }
+    </script>
 </head>
 <body>
 
 <nav>
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#bio">Bio</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#links">Links</a></li>
-    </ul>
+    <div class="nav-inner">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#bio">Bio</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#links">Links</a></li>
+        </ul>
+        <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">&#9728;</button>
+    </div>
 </nav>
 
 <main>
 
-    <section id="home" class="home">
+    <section id="home" class="home fade-in">
         <!-- Replace src with your photo -->
         <img class="photo" src="FullSizeRender.jpg" alt="Thanh Nguyen">
         <h1>Thanh Nguyen</h1>
         <p class="tagline">Pork and onions, mostly</p>
     </section>
 
-    <section id="bio">
+    <section id="bio" class="fade-in">
         <h2>Bio</h2>
         <p>PM at DeepMind working on Gemini Response Quality, playing around with vibe coding. When I'm not working or planning my wedding, I love cooking, eating, hanging out, running, and traveling.</p>
     </section>
 
-    <section id="projects">
+    <section id="projects" class="fade-in">
         <h2>Current Projects</h2>
 
         <div class="project">
@@ -53,7 +64,7 @@
         </div>
     </section>
 
-    <section id="links">
+    <section id="links" class="fade-in">
         <h2>Links</h2>
         <ul class="links-list">
             <li><a href="https://x.com/tang_guin">X / Twitter</a></li>
@@ -63,6 +74,42 @@
     </section>
 
 </main>
+
+<footer>
+    <p>&copy; 2026 Thanh Nguyen &middot; <a href="#home">Back to top &uarr;</a></p>
+</footer>
+
+<script>
+    // --- Dark mode toggle ---
+    const toggle = document.querySelector('.theme-toggle');
+    const body = document.body;
+
+    // Apply saved preference on load
+    if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark');
+    }
+
+    toggle.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Clear the inline styles set by the flash-prevention script
+    document.documentElement.style.background = '';
+    document.documentElement.style.color = '';
+
+    // --- Scroll fade-in animation ---
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
